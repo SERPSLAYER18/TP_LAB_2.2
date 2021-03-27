@@ -10,13 +10,6 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
 
-/**
- * @author v.chibrikov
- *         <p>
- *         Пример кода для курса на https://stepic.org/
- *         <p>
- *         Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
- */
 public class UsersDAO {
 
     private Session session;
@@ -33,21 +26,19 @@ public class UsersDAO {
         Criteria criteria = session.createCriteria(UserData.class);
         return ((UserData) criteria.add(Restrictions.eq("name", name)).uniqueResult()).getId();
     }
-    public ArrayList<UserData> getAllUsers()
-    {
+
+    public ArrayList<UserData> getAllUsers() {
         Criteria criteria = session.createCriteria(UserData.class);
-        return (ArrayList<UserData>)criteria.list();
+        return (ArrayList<UserData>) criteria.list();
     }
 
-    public void deleteUSer(UserData data)
-    {
+    public void deleteUSer(UserData data) {
         session.delete(data);
     }
 
-    public ArrayList<UserData> get(Criterion restrictions)
-    {
+    public ArrayList<UserData> get(Criterion restrictions) {
         Criteria criteria = session.createCriteria(UserData.class);
-        return (ArrayList<UserData>)criteria.add(restrictions).list();
+        return (ArrayList<UserData>) criteria.add(restrictions).list();
     }
 
     public long insertUser(UserData user) throws HibernateException {

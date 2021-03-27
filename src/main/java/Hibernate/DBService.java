@@ -29,6 +29,12 @@ public class DBService {
         sessionFactory = createSessionFactory(configuration);
     }
 
+    private static SessionFactory createSessionFactory(Configuration configuration) {
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+        builder.applySettings(configuration.getProperties());
+        ServiceRegistry serviceRegistry = builder.build();
+        return configuration.buildSessionFactory(serviceRegistry);
+    }
 
     private Configuration getH2Configuration() {
         Configuration configuration = new Configuration();
@@ -45,42 +51,62 @@ public class DBService {
     }
 
     public UserData getUser(long id) {
-            Session session = sessionFactory.openSession();
-            UsersDAO dao = new UsersDAO(session);
-            UserData dataSet = dao.get(id);
-            session.close();
-            return dataSet;
+        Session session = sessionFactory.openSession();
+        UsersDAO dao = new UsersDAO(session);
+        UserData dataSet = dao.get(id);
+        session.close();
+        return dataSet;
 
     }
 
-    public long saveUser(UserData user)  {
+    public long saveUser(UserData user) {
 
-            Session session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();
-            UsersDAO dao = new UsersDAO(session);
-            long id = dao.insertUser(user);
-            transaction.commit();
-            session.close();
-            return id;
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        UsersDAO dao = new UsersDAO(session);
+        long id = dao.insertUser(user);
+        transaction.commit();
+        session.close();
+        return id;
 
     }
 
-    public ArrayList<UserData> getAllUsers()
-    {
+    public void updateUser(UserData oldUser, UserData newUser) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.evict(oldUser);
+        oldUser = newUser;
+        session.update(oldUser);
+
+        transaction.commit();
+        session.close();
+    }
+
+    public void deleteUser(UserData user) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.delete(user);
+
+        transaction.commit();
+        session.close();
+    }
+
+    public ArrayList<UserData> getAllUsers() {
         Session session = sessionFactory.openSession();
         UsersDAO dao = new UsersDAO(session);
         ArrayList<UserData> list = dao.getAllUsers();
         session.close();
-        return  list;
+        return list;
     }
 
-    public void cleanUpUsers()
-    {
+    public void cleanUpUsers() {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         UsersDAO dao = new UsersDAO(session);
         List<UserData> users = dao.getAllUsers();
-        for(UserData user : users)
+        for (UserData user : users)
             session.delete(user);
         transaction.commit();
         session.close();
@@ -99,13 +125,6 @@ public class DBService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private static SessionFactory createSessionFactory(Configuration configuration) {
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        builder.applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = builder.build();
-        return configuration.buildSessionFactory(serviceRegistry);
     }
 
 

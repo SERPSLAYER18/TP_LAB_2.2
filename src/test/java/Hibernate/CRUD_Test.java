@@ -30,19 +30,20 @@ public class CRUD_Test {
         Assertions.assertEquals(list, listFromDB);
 
 
-//        //UPDATE
-//        var user = list.get(1);
-//        dbService.updateUser(user, new String[]{"2", "Elizabeth", "Levdanskaya", "18"});
-//        listFromDB = dbService.getUsers(userData -> true);
-//        user.setFirst("Elizabeth");
-//        user.setAge(18);
-//        list.set(1, user);
-//        Assertions.assertEquals(list, listFromDB);
-//
-//        //DELETE
-//        dbService.deleteUser(user);
-//        listFromDB = dbService.getUsers(userData -> true);
-//        list.remove(user);
-//        Assertions.assertEquals(list, listFromDB);
+        //UPDATE
+        var user = list.get(1);
+        var newUser =  user;
+        newUser.setFirst("Elizabeth");
+        newUser.setAge(18);
+        list.set(1, newUser);
+        dbService.updateUser(user, newUser);
+        listFromDB = dbService.getAllUsers();
+        Assertions.assertEquals(list, listFromDB);
+
+        //DELETE
+        dbService.deleteUser(user);
+        listFromDB = dbService.getAllUsers();
+        list.remove(user);
+        Assertions.assertEquals(list, listFromDB);
     }
 }

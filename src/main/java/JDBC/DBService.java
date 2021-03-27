@@ -25,45 +25,36 @@ public class DBService {
         userDAO = new UserDAO(connection);
     }
 
-    public UserData getUser(long id)
-    {
+    public UserData getUser(long id) {
         return userDAO.get(id);
     }
 
-    public ArrayList<UserData> getUsers(Predicate<UserData> predicate) throws SQLException
-    {
+    public ArrayList<UserData> getUsers(Predicate<UserData> predicate) throws SQLException {
         return userDAO.get(predicate);
     }
 
-    public void saveUser(UserData userData) throws SQLException{
+    public void saveUser(UserData userData) throws SQLException {
         try {
             connection.setAutoCommit(false);
             userDAO.createTable();
             userDAO.save(userData);
             connection.commit();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             connection.rollback();
-        }
-        finally {
+        } finally {
             connection.setAutoCommit(true);
         }
 
     }
 
-    public void updateUser(UserData userData, String[] params) throws SQLException
-    {
+    public void updateUser(UserData userData, String[] params) throws SQLException {
         try {
             connection.setAutoCommit(false);
-            userDAO.update(userData,params);
+            userDAO.update(userData, params);
             connection.commit();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             connection.rollback();
-        }
-        finally {
+        } finally {
             connection.setAutoCommit(true);
         }
 
@@ -74,12 +65,9 @@ public class DBService {
             connection.setAutoCommit(false);
             userDAO.delete(userData);
             connection.commit();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             connection.rollback();
-        }
-        finally {
+        } finally {
             connection.setAutoCommit(true);
         }
     }
@@ -89,12 +77,9 @@ public class DBService {
             connection.setAutoCommit(false);
             userDAO.dropTable();
             connection.commit();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             connection.rollback();
-        }
-        finally {
+        } finally {
             connection.setAutoCommit(true);
         }
     }

@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SQLExecutor {
-    private Connection connection;
     Statement statement = null;
+    private Connection connection;
 
     public SQLExecutor(Connection connection) {
         this.connection = connection;

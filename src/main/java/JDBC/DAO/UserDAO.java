@@ -10,27 +10,25 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 public class UserDAO implements DAO<UserData> {
-    private SQLExecutor executor;
-
-    public UserDAO(Connection connection) throws SQLException {
-        executor = new SQLExecutor( connection);
-        createTable();
-    }
-
-
-    DataSetAction<UserData>  getUsersList = resultSet -> {
+    DataSetAction<UserData> getUsersList = resultSet -> {
         ArrayList<UserData> list = new ArrayList<>();
         while (resultSet.next()) {
             list.add(new UserData(resultSet));
         }
         return list;
     };
+    private SQLExecutor executor;
 
+
+    public UserDAO(Connection connection) throws SQLException {
+        executor = new SQLExecutor(connection);
+        createTable();
+    }
 
     @Override
     public UserData get(long id) {
         try {
-            return executor.sqlQuery("select * from users where id = " + id,getUsersList).get(0);
+            return executor.sqlQuery("select * from users where id = " + id, getUsersList).get(0);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -65,7 +63,7 @@ public class UserDAO implements DAO<UserData> {
     @Override
     public void update(UserData userData, String[] params) throws SQLException {
         // %s, last = %s, age = %d where id = %d
-        executor.sqlUpdate(String.format( "update users set (first,last,age) = ('%s','%s','%s') where id = '%s'",
+        executor.sqlUpdate(String.format("update users set (first,last,age) = ('%s','%s','%s') where id = '%s'",
                 params[1],
                 params[2],
                 params[3],
@@ -74,7 +72,7 @@ public class UserDAO implements DAO<UserData> {
 
     @Override
     public void delete(UserData userData) throws SQLException {
-        executor.sqlUpdate(String.format( "delete from users where id = %d", userData.getId()));
+        executor.sqlUpdate(String.format("delete from users where id = %d", userData.getId()));
 
     }
 
