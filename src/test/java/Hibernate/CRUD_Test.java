@@ -22,8 +22,7 @@ public class CRUD_Test {
         //CREATE
         DBService dbService = new DBService();
         dbService.cleanUpUsers();
-        for (
-                UserData user : list)
+        for (UserData user : list)
             dbService.saveUser(user);
 
         ArrayList<UserData> listFromDB = dbService.getAllUsers();
@@ -32,7 +31,7 @@ public class CRUD_Test {
 
         //UPDATE
         var user = list.get(1);
-        var newUser =  user;
+        var newUser = user;
         newUser.setFirst("Elizabeth");
         newUser.setAge(18);
         list.set(1, newUser);
